@@ -63,9 +63,9 @@ This library is in an early stage of development, expect some changes.
 > The `Actions` objects will probably change since `@ngrx/effects` has an `Actions` type.
  
 ## Background
-Redux is cool, super cool, but its hard to manage. 
+Redux is cool, super cool, but it's hard to manage. 
 Having all that boilerplate and strict discipline, that's tough!  
-Working with NGRX I found 2 painful issues that this library try to solve:
+Working with NGRX I found 2 painful issues that this library tries to solve:
   - Typescript: global `State` type (modularize, lazy load)
   - File Structure
 
@@ -74,7 +74,7 @@ Our store represents a shared global state object. It's an empty object.
 Reducers populate the global state, each property on the global state is a child state managed by a reducer.  
 >We can think of the store as a database where each property is a table, hence a reducer is a table.
 
-Each reducer defines it own state interface internally, we don't have a typed global state.  
+Each reducer defines its own state interface internally, we don't have a typed global state.  
 Every time we use the store we get a portion of the global state type.
 
 ```
@@ -97,7 +97,7 @@ export interface State {
   layout: fromLayout.State;
 }
 ```
-This means we need to import every reducer, extra work but most important creates a dependency.  
+This means we need to import every reducer, extra work, but most importantly, it creates a dependency.  
 It works fine on small projects using the **By Redux role** structure but it does not scale.
 >A Dependency makes it hard to modularize, tree shake and lazy load with NGRX.
 
@@ -108,7 +108,7 @@ As the project grows it's getting difficult to structure the code so developers 
 There are many ways for structuring your code, the 2 most popular are:
  
 #### By feature
-Each application feature contains it own set or redux roles.
+Each application feature contains its own set or redux roles.
 ```
 ├── project-root/
 │   ├── book
@@ -128,10 +128,10 @@ Each application feature contains it own set or redux roles.
 │   │   ├── reducer.ts
 ```
 ##### pros:
-**Scales:** Changes are scoped into a single module, one place for all the redux logic and domain logic.  
+**Scales:** Changes are scoped into a single module, one place for all of the redux logic and domain logic.  
 
 ##### cons:
-**Dependent**: Accessing features is done by importing it module using hard coded relative path reference.   
+**Dependent**: Accessing features is done by importing its module using hard coded relative path reference.   
 **Hard to access**: Sometimes features are nested inside other modules
 
 #### By Redux role
@@ -151,30 +151,30 @@ Each role (Actions, Reducers) in the Redux eco-system (and Effects in **ngrx**) 
 │   │   ├── index.ts
 │   │   ├── layout.ts
 ```
-Some roles acts as classic modules with `index.ts` (reducers)  
-some acts as containers where each internal file is a module (actions, effects)
+Some roles act as classic modules with `index.ts` (reducers)  
+Some act as containers where each internal file is a module (actions, effects)
 
 ##### pros:
-**Easy access:** This structure allows easy access when importing from other location in our app.
+**Easy access:** This structure allows easy access when importing from other locations in our app.
 
 ##### cons:
-**Does not scale:** When adding or changing features some groups of objects tend to change together
-for example, when we change the `reducers/book.ts` we will probably change `actions/book.ts` and `effects/books.ts`.  
+**Does not scale:** When adding or changing features to some groups of objects, we tend to change them together
+For example, when we change the `reducers/book.ts` we will probably change `actions/book.ts` and `effects/books.ts`.  
 
 ## Enter `domains`
 A Domain is a namespaced encapsulated feature that you can access easily from anywhere in your app without directly referencing it.
 
 Each **Domain** is a redux logic unit that is responsible for:
   - publish itself in the registry
-  - publish it's type information 
+  - publish its type information 
   - publish interaction methods (Actions)
   - manage all logic of the domain (reducers)
   - publish domain queries (optional)
   - publish domain models (optional)
 
-> A Domain can also encapsulate it own `@Effect` services, they can be created outside of the domain.
-  Since importing domain objects is easy they can live outside the domain.
-  That's a choice of preference, `@Effect` has domain logic so it should be inside but its also an `@Injectable`...
+> A Domain can also encapsulate its own `@Effect` services, they can be created outside of the domain.
+  Since importing domain objects is easy they can live outside of the domain.
+  That's a choice of preference, `@Effect` has domain logic so it should be inside but it's also an `@Injectable`...
   
 A Domain is like a plugin, it attaches itself to the registry. The registry does not know about the plugin/domain.
 
@@ -193,13 +193,13 @@ Dynamically adding objects (actions, reducers, queries, models) to a global regi
 #####Design time:
 Being able to reflect the dynamic additions as "concrete" type information.  
 Remember that the global registry is empty, actions, state, queries, etc... are all empty object with no type information.  
-Adding type information requires a small amount boilerplate that helps TypeScript know about the structure.
+Adding type information requires a small amount of boilerplate that helps TypeScript to know about the structure.
 A lot of this boilerplate you would have done anyway.
 > The boilerplate represents Type information, as so it has no effect on the javascript output, i.e
 it has no footprint on the compiled code emitted by TypeScript.
 
 ## Lazy domains
-Angular can lazy load modules, infect its a must for all medium sized apps and up.
+Angular can lazy load modules, in fact it's a must for all medium sized apps and beyond.
 It is obvious that we want to define domains inside modules and load them only when required. Since **ngrx-domains** is plugin oriented this is quite easy.
 
 **ngrx-domains** has an observable that emits whenever a new domain is registered, we can subscribe to it and re-create the reducer tree every time a new domain is added.
@@ -387,7 +387,7 @@ createDomain('simpleUser', reducer);
 
 ## Development
 **lib** - Directory holding the `ngrx-domains` library code in TS.
-**src** - A demo app until units tests...
+**src** - A demo app until unit tests...
 
 The demo apps should consume a compiled version of **lib**, this is why there is a compilation process for the lib separate from the demo app.
 
